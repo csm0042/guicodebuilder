@@ -4,7 +4,6 @@
 ################################################################################################################
 import logging
 import tkinter as tk
-import configparser
 
 
 ################################################################################################################
@@ -178,28 +177,28 @@ class gui(object):
 			filename=self.logfile, filemode='w')
 		logging.info('[gui.__init__] Appwindow object created')
 
-		self.frameCount = 4
+		self.frameCount = 3
 		self.Frame = Frame()
 		self.frame_settings = Frame()
 		self.FramePlace = Place()
 		self.tkFrame = [tk.Frame() for i in range(self.frameCount)]
 		logging.info('[gui.__init__] Found configuration data for %d frame widgets' % self.frameCount)
 
-		self.messageCount = 2
+		self.messageCount = 4
 		self.Message = Message()
 		self.message_settings = Message()
 		self.MessagePlace = Place()
 		self.tkMessage = [tk.Message() for i in range(self.messageCount)]
 		logging.info('[gui.__init__] Found configuration data for %d message widgets' % self.messageCount)
 
-		self.textCount = 1
+		self.textCount = 4
 		self.Text = Text()
 		self.text_settings = Text()
 		self.TextPlace = Place()
 		self.tkText = [tk.Text() for i in range(self.textCount)]
 		logging.info('[gui.__init__] Found configuration data for %d text widgets' % self.textCount)
 
-		self.buttonCount = 13
+		self.buttonCount = 2
 		self.Button = Button()
 		self.button_settings = Button()
 		self.ButtonPlace = Place()
@@ -213,28 +212,53 @@ class gui(object):
 	################################################################################################################
 	def create_window(self):
 		logging.info('[gui.create_window] Adjusting window geometry')
-		self.root.geometry("%sx%s+%s+%s" % (640, 480, 10, 10))
-		self.root.title('Main')
+		self.root.geometry("%sx%s+%s+%s" % (500, 610, 10, 10))
+		self.root.config(background='gray')
+		logging.info('[gui.create_window] Adjusting window background color')
+		self.root.title('File Auto-Rename')
 		logging.info('[gui.create_window] Setting window title')
 
 		logging.info('[gui.create_window] Starting frame widget loop')
 		logging.info('[gui.create_window] Creating frame widget #%d' % 1)
-		self.tkFrame[i] = self.create_frame_widget(self.tkFrame[i], self.Frame, self.FramePlace)
-		self.tkFrame.config(height=60')
-		self.tkFrame.config(relief=raised')
-		self.tkFrame.config(width=640')self.tkFrame.place()
+		self.tkFrame[0]=tk.Frame()
+		self.tkFrame[0].config(borderwidth=2)
+		self.tkFrame[0].config(height=90)
+		self.tkFrame[0].config(relief='sunken')
+		self.tkFrame[0].config(width=496)
+		self.tkFrame[0].place()
+		self.tkFrame[0].place_configure(anchor='nw')
+		self.tkFrame[0].place_configure(bordermode='inside')
+		self.tkFrame[0].place_configure(x=2)
+		self.tkFrame[0].place_configure(y=2)
+
+
 		logging.info('[gui.create_window] Creating frame widget #%d' % 2)
-		self.tkFrame[i] = self.create_frame_widget(self.tkFrame[i], self.Frame, self.FramePlace)
-		self.tkFrame.config(height=60')
-		self.tkFrame.config(relief=raised')
-		self.tkFrame.config(width=640')self.tkFrame.place()
+		self.tkFrame[1]=tk.Frame()
+		self.tkFrame[1].config(borderwidth=2)
+		self.tkFrame[1].config(height=105)
+		self.tkFrame[1].config(relief='sunken')
+		self.tkFrame[1].config(width=496)
+		self.tkFrame[1].place()
+		self.tkFrame[1].place_configure(anchor='nw')
+		self.tkFrame[1].place_configure(bordermode='inside')
+		self.tkFrame[1].place_configure(x=2)
+		self.tkFrame[1].place_configure(y=94)
+
+
 		logging.info('[gui.create_window] Creating frame widget #%d' % 3)
-		self.tkFrame[i] = self.create_frame_widget(self.tkFrame[i], self.Frame, self.FramePlace)
-		self.tkFrame.config(height=360')
-		self.tkFrame.config(relief=sunken')
-		self.tkFrame.config(width=60')self.tkFrame.place()
-		logging.info('[gui.create_window] Creating frame widget #%d' % 4)
-		self.tkFrame[i] = self.create_frame_widget(self.tkFrame[i], self.Frame, self.FramePlace)
-		self.tkFrame.config(height=360')
-		self.tkFrame.config(relief=sunken')
-		self.tkFrame.config(width=60')self.tkFrame.place()
+		self.tkFrame[2]=tk.Frame()
+		self.tkFrame[2].config(borderwidth=2)
+		self.tkFrame[2].config(height=392)
+		self.tkFrame[2].config(relief='sunken')
+		self.tkFrame[2].config(width=496)
+		self.tkFrame[2].place()
+		self.tkFrame[2].place_configure(anchor='nw')
+		self.tkFrame[2].place_configure(bordermode='inside')
+		self.tkFrame[2].place_configure(x=2)
+		self.tkFrame[2].place_configure(y=203)
+
+
+		self.root.mainloop()
+if __name__ == "__main__":
+	appwindow = gui('debug.log')
+	appwindow.create_window()
