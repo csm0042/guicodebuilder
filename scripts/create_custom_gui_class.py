@@ -4,21 +4,18 @@ __author__ = 'chris.maue'
 #######################################################################################################################
 # Import required libraries
 #######################################################################################################################
+import guicodebuilder
 import logging
 import os
-import gui_builder
-
-
+import sys
 
 
 #######################################################################################################################
 # Determine project path and auto-set debug log file and gui configuration file names as appropriate
 #######################################################################################################################
-projectPath = os.path.split(__file__)
+projectPath = os.path.split(sys.argv[0])
 debugLogFile = os.path.normcase(os.path.join(projectPath[0], 'debug.log'))
 guiIniFile = os.path.normcase(os.path.join(projectPath[0], 'gui_setup.ini'))
-
-
 
 
 #######################################################################################################################
@@ -33,9 +30,6 @@ logging.info('[Main] Logging to file: %s' % debugLogFile)
 logging.info('[Main] Using GUI configuration file: %s' % guiIniFile)
 
 
-
-
-
 #######################################################################################################################
 # Define Data types
 #######################################################################################################################
@@ -43,8 +37,6 @@ class application_IO(object):
     def __init__(self):
         self.input = [bool() for i in range(32)]
         self.output = [bool() for i in range(32)]
-
-
 
 
 #######################################################################################################################
@@ -55,11 +47,8 @@ IoTableCache = application_IO()
 IoTableOS = application_IO()
 
 
-
-
-
 #######################################################################################################################
 # Start application window (runs in main thread)
 #######################################################################################################################
-gui_object = gui_builder.gui(guiIniFile, debugLogFile, IoTable)
+gui_object = guicodebuilder.gui(guiIniFile, debugLogFile, IoTable)
 gui_object.create_window()
