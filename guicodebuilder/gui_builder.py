@@ -251,14 +251,12 @@ class gui(object):
         self.Text = Text()
         self.TextPlace = Place()
         self.tkText = [tk.Text() for i in range(self.textCount)]
-        self.tkTextHandshake = [str() for i in range(self.textCount)]
         logging.info('[gui.__init__] Found configuration data for %d "text" widgets' %self.textCount)
 
         self.buttonCount = CountWidgetByType(self.inifile, "button")
         self.Button = Button()
         self.ButtonPlace = Place()
         self.tkButton = [tk.Button() for i in range(self.buttonCount)]
-        self.ButtonInput = [bool() for i in range(self.buttonCount)]
         logging.info('[gui.__init__] Found configuration data for %d "button" widgets' %self.buttonCount)
 
 
@@ -491,7 +489,6 @@ class gui(object):
         self.codelines.append('\n\t\tself.button_settings = Button()')
         self.codelines.append('\n\t\tself.ButtonPlace = Place()')
         self.codelines.append('\n\t\tself.tkButton = [tk.Button() for i in range(self.buttonCount)]')
-        self.codelines.append('\n\t\tself.ButtonInput = [bool() for i in range(self.buttonCount)]')
         self.codelines.append("\n\t\tlogging.info('[gui.__init__] Found configuration data for %d button widgets' % self.buttonCount)")
         self.codelines.append('\n')
         self.codelines.append('\n')
@@ -759,9 +756,73 @@ class gui(object):
                 self.codelines.append(self.FramePlace.offsetY)
                 self.codelines.append(")")
                 self.codelines.append('\n')
-                self.codelines.append('\n')
 
+
+        ################################################################################################################
+        # CALL LOOP TO CREATE MESSAGE WIDGETS
+        ################################################################################################################
+        self.codelines.append("\n\t\tlogging.info('[gui.create_window] Starting frame widget loop')")
+        for i in range(0, self.frameCount):
+            self.Frame.section = str("frame" + str(i+1))
+
+            Config = configparser.ConfigParser()
+            Config.read(self.inifile)
+            dict1 = {}
+            options = Config.options(self.Frame.section)
+            for option in options:
+                try:
+                    dict1[option] = Config.get(self.Frame.section, option)
+                    if dict1[option] == -1:
+                        pass
+                except:
+                    dict1[option] = None
+
+
+        ################################################################################################################
+        # CALL LOOP TO CREATE TEXT WIDGETS
+        ################################################################################################################
+        self.codelines.append("\n\t\tlogging.info('[gui.create_window] Starting frame widget loop')")
+        for i in range(0, self.frameCount):
+            self.Frame.section = str("frame" + str(i+1))
+
+            Config = configparser.ConfigParser()
+            Config.read(self.inifile)
+            dict1 = {}
+            options = Config.options(self.Frame.section)
+            for option in options:
+                try:
+                    dict1[option] = Config.get(self.Frame.section, option)
+                    if dict1[option] == -1:
+                        pass
+                except:
+                    dict1[option] = None
+
+
+        ################################################################################################################
+        # CALL LOOP TO CREATE BUTTON WIDGETS
+        ################################################################################################################
+        self.codelines.append("\n\t\tlogging.info('[gui.create_window] Starting frame widget loop')")
+        for i in range(0, self.frameCount):
+            self.Frame.section = str("frame" + str(i+1))
+
+            Config = configparser.ConfigParser()
+            Config.read(self.inifile)
+            dict1 = {}
+            options = Config.options(self.Frame.section)
+            for option in options:
+                try:
+                    dict1[option] = Config.get(self.Frame.section, option)
+                    if dict1[option] == -1:
+                        pass
+                except:
+                    dict1[option] = None
+
+
+        ################################################################################################################
+        # ADD CALL FOR TKINTER MAIN LOOP TO SPAWN APP WINDOW
+        ################################################################################################################
         self.codelines.append('\n\t\tself.root.mainloop()')
+
 
         ################################################################################################################
         # ADD CODE TO END OF SCRIPT TO MAKE IT SELF-EXECUTING
