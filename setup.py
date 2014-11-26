@@ -1,5 +1,5 @@
 from setuptools import setup, find_packages
-import py2exe
+#import py2exe
 
 
 def readme():
@@ -25,8 +25,8 @@ setup(
     console=['scripts/create_custom_gui_class.py'],
     #windows=['scripts/main.py'],
 
-    options={'py2exe': {'bundle_files': 2, 'compressed': True}},
+    #options={'py2exe': {'bundle_files': 2, 'compressed': True}},
     zip_safe=False,
 
-    data_files=['gui_setup.ini']
+    #data_files=['gui_setup.ini']
     )
