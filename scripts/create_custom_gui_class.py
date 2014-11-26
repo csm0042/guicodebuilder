@@ -31,24 +31,7 @@ logging.info('[Main] Using GUI configuration file: %s' % guiIniFile)
 
 
 #######################################################################################################################
-# Define Data types
-#######################################################################################################################
-class application_IO(object):
-    def __init__(self):
-        self.input = [bool() for i in range(32)]
-        self.output = [bool() for i in range(32)]
-
-
-#######################################################################################################################
-# Define Data tags used for interlocking between application window and IO monitor threads
-#######################################################################################################################
-IoTable = application_IO()
-IoTableCache = application_IO()
-IoTableOS = application_IO()
-
-
-#######################################################################################################################
 # Start application window (runs in main thread)
 #######################################################################################################################
-gui_object = guicodebuilder.gui(guiIniFile, debugLogFile, IoTable)
-gui_object.create_window()
+gui_object = guicodebuilder.gui(guiIniFile, debugLogFile)
+gui_object.create_class()
