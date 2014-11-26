@@ -2,6 +2,7 @@ import logging
 from .gui_callbacks import *
 import os
 import tkinter as tk
+import configparser
 
 
 #######################################################################################################################
@@ -240,7 +241,6 @@ class Text(object):
         self.section = str()
 
     def read_settings(self):
-        import configparser
         Config = configparser.ConfigParser()
         Config.read(self.iniFile)
         dict1 = {}
@@ -450,7 +450,7 @@ class gui(object):
         self.address = int()
         self.text_to_write = str()
         self.text_to_write_mem = str()
-        #self.place_settings = Place()
+        self.place_settings = Place()
         self.path = str()
         self.codetowritetofile = str()
 
@@ -463,31 +463,27 @@ class gui(object):
         self.Window = Window()
 
         self.frameCount = CountWidgetByType(self.inifile, "frame")
-        #self.Frame = Frame()
-        #self.frame_settings = Frame()
-        #self.FramePlace = Place()
+        self.Frame = Frame()
+        self.FramePlace = Place()
         self.tkFrame = [tk.Frame() for i in range(self.frameCount)]
         logging.info('[gui.__init__] Found configuration data for %d "frame" widgets' %self.frameCount)
 
         self.messageCount = CountWidgetByType(self.inifile, "message")
-        #self.Message = Message()
-        #self.message_settings = Message()
-        #self.MessagePlace = Place()
+        self.Message = Message()
+        self.MessagePlace = Place()
         self.tkMessage = [tk.Message() for i in range(self.messageCount)]
         logging.info('[gui.__init__] Found configuration data for %d "message" widgets' %self.messageCount)
 
         self.textCount = CountWidgetByType(self.inifile, "text")
-        #self.Text = Text()
-        #self.text_settings = Text()
-        #self.TextPlace = Place()
+        self.Text = Text()
+        self.TextPlace = Place()
         self.tkText = [tk.Text() for i in range(self.textCount)]
         self.tkTextHandshake = [str() for i in range(self.textCount)]
         logging.info('[gui.__init__] Found configuration data for %d "text" widgets' %self.textCount)
 
         self.buttonCount = CountWidgetByType(self.inifile, "button")
-        #self.Button = Button()
-        #self.button_settings = Button()
-        #self.ButtonPlace = Place()
+        self.Button = Button()
+        self.ButtonPlace = Place()
         self.tkButton = [tk.Button() for i in range(self.buttonCount)]
         self.ButtonInput = [bool() for i in range(self.buttonCount)]
         logging.info('[gui.__init__] Found configuration data for %d "button" widgets' %self.buttonCount)
@@ -678,14 +674,13 @@ class gui(object):
 
 
         ################################################################################################################
-        # DEFINE CLASS AND ADD __init__ METHOD
+        # DEFINE GUI CLASS AND ADD __init__ METHOD
         ################################################################################################################
         self.codestring.append('\n################################################################################################################')
         self.codestring.append('\n#DEFINE GUI CLASS')
         self.codestring.append('\n################################################################################################################')
         self.codestring.append('\nclass gui(object):')
-        self.codestring.append('\n\tdef __init__(self, inifile, logfile):')
-        self.codestring.append('\n\t\tself.inifile = inifile')
+        self.codestring.append('\n\tdef __init__(self, logfile):')
         self.codestring.append('\n\t\tself.logfile = logfile')
         self.codestring.append('\n\t\tself.root = tk.Tk()')
         self.codestring.append('\n')
@@ -693,6 +688,39 @@ class gui(object):
         self.codestring.append('''\n\t\t\tformat='%(asctime)s %(levelname)-8s %(message)s', ''')
         self.codestring.append('''\n\t\t\tfilename=self.logfile, filemode='w')''')
         self.codestring.append('''\n\t\tlogging.info('[gui.__init__] Appwindow object created')''')
+        self.codestring.append('\n')
+        self.codestring.append('\n\t\tself.frameCount = ')
+        self.codestring.append(str(CountWidgetByType(self.inifile, "frame")))
+        self.codestring.append('\n\t\tself.Frame = Frame()')
+        self.codestring.append('\n\t\tself.frame_settings = Frame()')
+        self.codestring.append('\n\t\tself.FramePlace = Place()')
+        self.codestring.append('\n\t\tself.tkFrame = [tk.Frame() for i in range(self.frameCount)]')
+        self.codestring.append("\n\t\tlogging.info('[gui.__init__] Found configuration data for %d frame widgets' % self.frameCount)")
+        self.codestring.append('\n')
+        self.codestring.append('\n\t\tself.messageCount = ')
+        self.codestring.append(str(CountWidgetByType(self.inifile, "message")))
+        self.codestring.append('\n\t\tself.Message = Message()')
+        self.codestring.append('\n\t\tself.message_settings = Message()')
+        self.codestring.append('\n\t\tself.MessagePlace = Place()')
+        self.codestring.append('\n\t\tself.tkMessage = [tk.Message() for i in range(self.messageCount)]')
+        self.codestring.append("\n\t\tlogging.info('[gui.__init__] Found configuration data for %d message widgets' % self.messageCount)")
+        self.codestring.append('\n')
+        self.codestring.append('\n\t\tself.textCount = ')
+        self.codestring.append(str(CountWidgetByType(self.inifile, "text")))
+        self.codestring.append('\n\t\tself.Text = Text()')
+        self.codestring.append('\n\t\tself.text_settings = Text()')
+        self.codestring.append('\n\t\tself.TextPlace = Place()')
+        self.codestring.append('\n\t\tself.tkText = [tk.Text() for i in range(self.textCount)]')
+        self.codestring.append("\n\t\tlogging.info('[gui.__init__] Found configuration data for %d text widgets' % self.textCount)")
+        self.codestring.append('\n')
+        self.codestring.append('\n\t\tself.buttonCount = ')
+        self.codestring.append(str(CountWidgetByType(self.inifile, "button")))
+        self.codestring.append('\n\t\tself.Button = Button()')
+        self.codestring.append('\n\t\tself.button_settings = Button()')
+        self.codestring.append('\n\t\tself.ButtonPlace = Place()')
+        self.codestring.append('\n\t\tself.tkButton = [tk.Button() for i in range(self.buttonCount)]')
+        self.codestring.append('\n\t\tself.ButtonInput = [bool() for i in range(self.buttonCount)]')
+        self.codestring.append("\n\t\tlogging.info('[gui.__init__] Found configuration data for %d button widgets' % self.buttonCount)")
         self.codestring.append('\n')
         self.codestring.append('\n')
 
@@ -709,7 +737,6 @@ class gui(object):
         self.codestring.append('\n\t################################################################################################################')
         self.codestring.append('\n\tdef create_window(self):')
         self.codestring.append('''\n\t\tlogging.info('[gui.create_window] Adjusting window geometry')''')
-        #self.codestring.append('''\n\t\tself.root.geometry("%sx%s+%s+%s" % (int(self.Window.width), int(self.Window.height), int(self.Window.posX), int(self.Window.posY)))''')
 
         self.codestring.append('''\n\t\tself.root.geometry("%sx%s+%s+%s" % (''')
         self.codestring.append(self.Window.width)
@@ -733,12 +760,213 @@ class gui(object):
             self.codestring.append("')")
             self.codestring.append('''\n\t\tlogging.info('[gui.create_window] Setting window title')''')
 
+        self.codestring.append('\n')
+
+
+        ################################################################################################################
+        # CALL LOOP TO CREATE FRAME WIDGETS
+        ################################################################################################################
+        self.codestring.append("\n\t\tlogging.info('[gui.create_window] Starting frame widget loop')")
+        for i in range(0, self.frameCount):
+            self.Frame.section = str("frame" + str(i+1))
+
+            Config = configparser.ConfigParser()
+            Config.read(self.inifile)
+            dict1 = {}
+            options = Config.options(self.Frame.section)
+            for option in options:
+                try:
+                    dict1[option] = Config.get(self.Frame.section, option)
+                    if dict1[option] == -1:
+                        pass
+                except:
+                    dict1[option] = None
+
+            self.Frame.backgroundColor = dict1['background color']
+            self.Frame.borderWidth = dict1['border width']
+            self.Frame.colormap = dict1['color map']
+            self.Frame.container = dict1['container']
+            self.Frame.cursor = dict1['cursor']
+            self.Frame.height = dict1['height']
+            self.Frame.highlightBackgroundColor = dict1['highlight background color']
+            self.Frame.highlightColor = dict1['highlight color']
+            self.Frame.highlightThickness = dict1['highlight thickness']
+            self.Frame.padX = dict1['pad x']
+            self.Frame.padY = dict1['pad y']
+            self.Frame.relief = dict1['relief']
+            self.Frame.takeFocus = dict1['take focus']
+            self.Frame.visual = dict1['visual']
+            self.Frame.width = dict1['width']
+
+
+            self.codestring.append("\n\t\tlogging.info('[gui.create_window] Creating frame widget #%d' % ")
+            self.codestring.append(str(i+1))
+            self.codestring.append(')')
+            if self.Frame.backgroundColor != '':
+                self.codestring.append('\n\t\tself.tkFrame[')
+                self.codestring.append(i)
+                self.codestring.append('].config(background=')
+                self.codestring.append(self.Frame.backgroundColor)
+                self.codestring.append("')")
+            if self.Frame.borderwidth != '':
+                self.codestring.append('\n\t\tself.tkFrame[')
+                self.codestring.append(i)
+                self.codestring.append('].config(borderwidth=')
+                self.codestring.append(self.Frame.borderwidth)
+                self.codestring.append("')")
+            if self.Frame.colormap != '':
+                self.codestring.append('\n\t\tself.tkFrame['
+                self.codestring.append(i)
+                self.codestring.append('].config(colormap=')
+                self.codestring.append(self.Frame.colormap)
+                self.codestring.append("')")
+            if self.Frame.container != '':
+                self.codestring.append('\n\t\tself.tkFrame.config(container=')
+                self.codestring.append(i)
+
+                self.codestring.append(self.Frame.container)
+                self.codestring.append("')")
+            if self.Frame.cursor != '':
+                self.codestring.append('\n\t\tself.tkFrame.config(cursor=')
+                self.codestring.append(i)
+
+                self.codestring.append(self.Frame.cursor)
+                self.codestring.append("')")
+            if self.Frame.height != '':
+                self.codestring.append('\n\t\tself.tkFrame.config(height=')
+                self.codestring.append(i)
+
+                self.codestring.append(self.Frame.height)
+                self.codestring.append("')")
+            if self.Frame.highlightBackgroundColor != '':
+                self.codestring.append('\n\t\tself.tkFrame.config(highlightbackground=')
+                self.codestring.append(i)
+
+                self.codestring.append(self.Frame.highlightBackgroundColor)
+                self.codestring.append("')")
+            if self.Frame.highlightColor != '':
+                self.codestring.append('\n\t\tself.tkFrame.config(highlightcolor=')
+                self.codestring.append(i)
+
+                self.codestring.append(self.Frame.highlightColor)
+                self.codestring.append("')")
+            if self.Frame.highlightThickness != '':
+                self.codestring.append('\n\t\tself.tkFrame.config(highlightthickness=')
+                self.codestring.append(i)
+
+                self.codestring.append(self.Frame.highlightThickness)
+                self.codestring.append("')")
+            if self.Frame.padX != '':
+                self.codestring.append('\n\t\tself.tkFrame.config(padx=')
+                self.codestring.append(i)
+
+                self.codestring.append(self.Frame.padX)
+                self.codestring.append("')")
+            if self.Frame.padY != '':
+                self.codestring.append('\n\t\tself.tkFrame.config(pady=')
+                self.codestring.append(i)
+
+                self.codestring.append(self.Frame.padY)
+                self.codestring.append("')")
+            if self.Frame.relief != '':
+                self.codestring.append('\n\t\tself.tkFrame.config(relief=')
+                self.codestring.append(i)
+
+                self.codestring.append(self.Frame.relief)
+                self.codestring.append("')")
+            if self.Frame.takeFocus != '':
+                self.codestring.append('\n\t\tself.tkFrame.config(takefocus=')
+                self.codestring.append(i)
+
+                self.codestring.append(self.Frame.takeFocus)
+                self.codestring.append("')")
+            if self.Frame.visual != '':
+                self.codestring.append('\n\t\tself.tkFrame.config(visual=')
+                self.codestring.append(i)
+
+                self.codestring.append(self.Frame.visual)
+                self.codestring.append("')")
+            if self.Frame.width != '':
+                self.codestring.append('\n\t\tself.tkFrame.config(width=')
+                self.codestring.append(i)
+
+                self.codestring.append(self.Frame.width)
+                self.codestring.append("')")
+            self.codestring.append('self.tkFrame.place()')
+            if self.FramePlace.anchor != '':
+                self.codestring.append('\n\t\tself.tkFrame.place_configure(anchor=')
+                self.codestring.append(i)
+
+                self.codestring.append(self.FramePlace.anchor)
+                self.codestring.append("')")
+            if self.FramePlace.borderMode != '':
+                self.codestring.append('\n\t\tself.tkFrame.place_configure(bordermode=')
+                self.codestring.append(i)
+
+                self.codestring.append(self.FramePlace.borderMode)
+                self.codestring.append("')")
+            if self.FramePlace.height != '':
+                self.codestring.append('\n\t\tself.tkFrame.place_configure(height=')
+                self.codestring.append(i)
+
+                self.codestring.append(self.FramePlace.height)
+                self.codestring.append("')")
+            if self.FramePlace.width != '':
+                self.codestring.append('\n\t\tself.tkFrame[')
+                self.codestring.append(str(i))
+                self.codestring.append('].place_configure(width=')
+                self.codestring.append(self.FramePlace.width)
+                self.codestring.append("')")
+            if self.FramePlace.relHeight != '':
+                self.codestring.append('\n\t\tself.tkFrame[')
+                self.codestring.append(str(i))
+                self.codestring.append('].place_configure(relheight=')
+                self.codestring.append(self.FramePlace.relHeight)
+                self.codestring.append("')")
+            if self.FramePlace.relWidth != '':
+                self.codestring.append('\n\t\tself.tkFrame[')
+                self.codestring.append(str(i))
+                self.codestring.append('].place_configure(relwidth=')
+                self.codestring.append(self.FramePlace.relWidth)
+                self.codestring.append("')")
+            if self.FramePlace.relX != '':
+                self.codestring.append('\n\t\tself.tkFrame[')
+                self.codestring.append(str(i))
+                self.codestring.append('].place_configure(relx=')
+                self.codestring.append(self.FramePlace.relX)
+                self.codestring.append("')")
+            if self.FramePlace.relY != '':
+                self.codestring.append('\n\t\tself.tkFrame[')
+                self.codestring.append(str(i))
+                self.codestring.append('].place_configure(rely=')
+                self.codestring.append(self.FramePlace.relY)
+                self.codestring.append("')")
+            if self.FramePlace.offsetX != '':
+                self.codestring.append('\n\t\tself.tkFrame[')
+                self.codestring.append(str(i))
+                self.codestring.append('].place_configure(x=')
+                self.codestring.append(self.FramePlace.offsetX)
+                self.codestring.append("')")
+            if self.FramePlace.offsetY != '':
+                self.codestring.append('\n\t\tself.tkFrame[')
+                self.codestring.append(str(i))
+                self.codestring.append('].place_configure(y=')
+                self.codestring.append(self.FramePlace.offsetY)
+                self.codestring.append("')")
+
+
+
+
+
+
+
+        ################################################################################################################
+        # ASSEMBLE LIST INTO A SINGLE STRING AND WRITE TO OUTPUT FILE
+        ################################################################################################################
         self.codetowritetofile = ''.join(self.codestring)
 
         self.path, self.junk = os.path.split(self.inifile)
-        print(self.path)
         self.outputfile = os.path.join(self.path, 'gui.py')
-
 
         f = open(self.outputfile, 'w')
         f.write(self.codetowritetofile)

@@ -425,14 +425,3 @@ __author__ = 'Christopher'
 
 
 
-
-
-
-
-########################################################################################################################
-#  Run if script is called manually
-########################################################################################################################
-if __name__ == "__main__":
-    ioTable = int()
-    AppWindowObject = gui('gui_setup.ini', 'debug.log', ioTable)
-    app = AppWindowObject.create_window()

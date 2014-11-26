@@ -169,8 +169,7 @@ class Place(object):
 #DEFINE GUI CLASS
 ################################################################################################################
 class gui(object):
-	def __init__(self, inifile, logfile):
-		self.inifile = inifile
+	def __init__(self, logfile):
 		self.logfile = logfile
 		self.root = tk.Tk()
 
@@ -178,6 +177,35 @@ class gui(object):
 			format='%(asctime)s %(levelname)-8s %(message)s', 
 			filename=self.logfile, filemode='w')
 		logging.info('[gui.__init__] Appwindow object created')
+
+		self.frameCount = 4
+		self.Frame = Frame()
+		self.frame_settings = Frame()
+		self.FramePlace = Place()
+		self.tkFrame = [tk.Frame() for i in range(self.frameCount)]
+		logging.info('[gui.__init__] Found configuration data for %d frame widgets' % self.frameCount)
+
+		self.messageCount = 2
+		self.Message = Message()
+		self.message_settings = Message()
+		self.MessagePlace = Place()
+		self.tkMessage = [tk.Message() for i in range(self.messageCount)]
+		logging.info('[gui.__init__] Found configuration data for %d message widgets' % self.messageCount)
+
+		self.textCount = 1
+		self.Text = Text()
+		self.text_settings = Text()
+		self.TextPlace = Place()
+		self.tkText = [tk.Text() for i in range(self.textCount)]
+		logging.info('[gui.__init__] Found configuration data for %d text widgets' % self.textCount)
+
+		self.buttonCount = 13
+		self.Button = Button()
+		self.button_settings = Button()
+		self.ButtonPlace = Place()
+		self.tkButton = [tk.Button() for i in range(self.buttonCount)]
+		self.ButtonInput = [bool() for i in range(self.buttonCount)]
+		logging.info('[gui.__init__] Found configuration data for %d button widgets' % self.buttonCount)
 
 
 	################################################################################################################
@@ -188,3 +216,25 @@ class gui(object):
 		self.root.geometry("%sx%s+%s+%s" % (640, 480, 10, 10))
 		self.root.title('Main')
 		logging.info('[gui.create_window] Setting window title')
+
+		logging.info('[gui.create_window] Starting frame widget loop')
+		logging.info('[gui.create_window] Creating frame widget #%d' % 1)
+		self.tkFrame[i] = self.create_frame_widget(self.tkFrame[i], self.Frame, self.FramePlace)
+		self.tkFrame.config(height=60')
+		self.tkFrame.config(relief=raised')
+		self.tkFrame.config(width=640')self.tkFrame.place()
+		logging.info('[gui.create_window] Creating frame widget #%d' % 2)
+		self.tkFrame[i] = self.create_frame_widget(self.tkFrame[i], self.Frame, self.FramePlace)
+		self.tkFrame.config(height=60')
+		self.tkFrame.config(relief=raised')
+		self.tkFrame.config(width=640')self.tkFrame.place()
+		logging.info('[gui.create_window] Creating frame widget #%d' % 3)
+		self.tkFrame[i] = self.create_frame_widget(self.tkFrame[i], self.Frame, self.FramePlace)
+		self.tkFrame.config(height=360')
+		self.tkFrame.config(relief=sunken')
+		self.tkFrame.config(width=60')self.tkFrame.place()
+		logging.info('[gui.create_window] Creating frame widget #%d' % 4)
+		self.tkFrame[i] = self.create_frame_widget(self.tkFrame[i], self.Frame, self.FramePlace)
+		self.tkFrame.config(height=360')
+		self.tkFrame.config(relief=sunken')
+		self.tkFrame.config(width=60')self.tkFrame.place()
