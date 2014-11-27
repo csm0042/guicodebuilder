@@ -10,7 +10,8 @@ rest of the application code.
 
 The current applicaton support tkinter windows, frames, message widgets, text widgets, and button widgets.  For usability-sake,
 a "callback" method is automatically added whenever an application file is generated containing buttons.  This callback method
-automatically expands so contain an entry for each button defined in the application.  By default, none of the buttons do anything
-other than log that they were pressed to the logfile (with one exception).  It is up to the user to add whatever functiosn are
-required manually once the initial code is auto-generated and the "gui.py" file is moved over to the target application.  Just
-to serve as an example, button #1 is pre-set-up in the callback method to terminate the root application window.
+automatically expands during code generation so it contains an entry for each button defined in the application.  By default, 
+none of the buttons do anything other than log that they were pressed to the logfile (with one exception).  It is up to the 
+user to add whatever functiosn are required manually once the initial code is auto-generated and the "gui.py" file is moved 
+over to the target application.  Just to serve as an example, button #1 is pre-set-up in the callback method to terminate 
+the root application window.
