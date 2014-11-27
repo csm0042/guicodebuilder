@@ -1,5 +1,4 @@
 import logging
-from .gui_callbacks import *
 import os
 import tkinter as tk
 import configparser
@@ -480,6 +479,8 @@ class gui(object):
         self.codelines.append('\n\t\tself.Text = Text()')
         self.codelines.append('\n\t\tself.text_settings = Text()')
         self.codelines.append('\n\t\tself.TextPlace = Place()')
+        self.codelines.append('\n\t\tself.text_to_write = str()')
+        self.codelines.append('\n\t\tself.text_to_write_mem = str()')
         self.codelines.append('\n\t\tself.tkText = [tk.Text() for i in range(self.textCount)]')
         self.codelines.append("\n\t\tlogging.info('[gui.__init__] Found configuration data for %d text widgets' % self.textCount)")
         self.codelines.append('\n')
@@ -761,67 +762,1018 @@ class gui(object):
         ################################################################################################################
         # CALL LOOP TO CREATE MESSAGE WIDGETS
         ################################################################################################################
-        self.codelines.append("\n\t\tlogging.info('[gui.create_window] Starting frame widget loop')")
-        for i in range(0, self.frameCount):
-            self.Frame.section = str("frame" + str(i+1))
+        self.codelines.append("\n\t\tlogging.info('[gui.create_window] Starting message widget loop')")
+        for i in range(0, self.messageCount):
+            self.Message.section = str("message" + str(i+1))
 
             Config = configparser.ConfigParser()
             Config.read(self.inifile)
             dict1 = {}
-            options = Config.options(self.Frame.section)
+            options = Config.options(self.Message.section)
             for option in options:
                 try:
-                    dict1[option] = Config.get(self.Frame.section, option)
+                    dict1[option] = Config.get(self.Message.section, option)
                     if dict1[option] == -1:
                         pass
                 except:
                     dict1[option] = None
+                    
+            self.Message.anchor = dict1['anchor']
+            self.Message.aspect = dict1['aspect']
+            self.Message.backgroundColor = dict1['background color']
+            self.Message.borderwidth = dict1['border width']
+            self.Message.cursor = dict1['cursor']
+            self.Message.font = dict1['font']
+            self.Message.fontSize = dict1['font size']
+            self.Message.foregroundColor = dict1['foreground color']
+            self.Message.highlightBackground = dict1['highlight background']
+            self.Message.highlightBackgroundColor = dict1['highlight background color']
+            self.Message.highlightThickness = dict1['highlight thickness']
+            self.Message.justify = dict1['justify']
+            self.Message.padX = dict1['pad x']
+            self.Message.padY = dict1['pad y']
+            self.Message.relief = dict1['relief']
+            self.Message.takeFocus = dict1['take focus']
+            self.Message.text = dict1['text']
+            self.Message.text = self.Message.text.replace('\\', '\\\\')
+            self.Message.textVariable = dict1['text variable']
+            self.Message.width = dict1['width']
+            self.MessagePlace.anchor = dict1['place anchor']
+            self.MessagePlace.borderMode = dict1['place border mode']
+            self.MessagePlace.height = dict1['place height']
+            self.MessagePlace.width = dict1['place width']
+            self.MessagePlace.relHeight = dict1['place rel height']
+            self.MessagePlace.relWidth = dict1['place rel width']
+            self.MessagePlace.relX = dict1['place rel x']
+            self.MessagePlace.relY = dict1['place rel y']
+            self.MessagePlace.offsetX = dict1['place offset x']
+            self.MessagePlace.offsetY = dict1['place offset y']
+            
+            self.codelines.append("\n\t\tlogging.info('[gui.create_window] Creating message widget #%d' % ")
+            self.codelines.append(str(i+1))
+            self.codelines.append(')')
+            self.codelines.append('\n\t\tself.tkMessage[')
+            self.codelines.append(str(i))
+            self.codelines.append(']=tk.Message()')
+            if self.Message.anchor != '':
+                self.codelines.append('\n\t\tself.tkMessage[')
+                self.codelines.append(str(i))
+                self.codelines.append("].config(anchor='")
+                self.codelines.append(self.Message.anchor)
+                self.codelines.append("')")
+            if self.Message.aspect != '':
+                self.codelines.append('\n\t\tself.tkMessage[')
+                self.codelines.append(str(i))
+                self.codelines.append('].config(aspect=''')
+                self.codelines.append(self.Message.aspect)
+                self.codelines.append("')")
+            if self.Message.backgroundColor != '':
+                self.codelines.append('\n\t\tself.tkMessage[')
+                self.codelines.append(str(i))
+                self.codelines.append("].config(background='")
+                self.codelines.append(self.Message.backgroundColor)
+                self.codelines.append("')")
+            if self.Message.borderwidth != '':
+                self.codelines.append('\n\t\tself.tkMessage[')
+                self.codelines.append(str(i))
+                self.codelines.append('].config(borderwidth=')
+                self.codelines.append(self.Message.borderwidth)
+                self.codelines.append(")")
+            if self.Message.cursor != '':
+                self.codelines.append('\n\t\tself.tkMessage[')
+                self.codelines.append(str(i))
+                self.codelines.append("].config(cursor='")
+                self.codelines.append(self.Message.backgroundColor)
+                self.codelines.append("')")
+            if self.Message.font != '':
+                self.codelines.append('\n\t\tself.tkMessage[')
+                self.codelines.append(str(i))
+                self.codelines.append("].config(font=('")
+                self.codelines.append(self.Message.font)
+                self.codelines.append("', ")
+                self.codelines.append(self.Message.fontSize)
+                self.codelines.append("))")
+            if self.Message.foregroundColor != '':
+                self.codelines.append('\n\t\tself.tkMessage[')
+                self.codelines.append(str(i))
+                self.codelines.append("].config(foreground='")
+                self.codelines.append(self.Message.foregroundColor)
+                self.codelines.append("')")
+            if self.Message.highlightBackground != '':
+                self.codelines.append('\n\t\tself.tkMessage[')
+                self.codelines.append(str(i))
+                self.codelines.append("].config(highlightbackground='")
+                self.codelines.append(self.Message.highlightBackground)
+                self.codelines.append("')")
+            if self.Message.highlightBackgroundColor != '':
+                self.codelines.append('\n\t\tself.tkMessage[')
+                self.codelines.append(str(i))
+                self.codelines.append("].config(highlightcolor='")
+                self.codelines.append(self.Message.highlightBackgroundColor)
+                self.codelines.append("')")
+            if self.Message.highlightThickness != '':
+                self.codelines.append('\n\t\tself.tkMessage[')
+                self.codelines.append(str(i))
+                self.codelines.append("].config(highlightthickness=")
+                self.codelines.append(self.Message.highlightThickness)
+                self.codelines.append(")")
+            if self.Message.justify != '':
+                self.codelines.append('\n\t\tself.tkMessage[')
+                self.codelines.append(str(i))
+                self.codelines.append("].config(justify='")
+                self.codelines.append(self.Message.justify)
+                self.codelines.append("')")
+            if self.Message.padX != '':
+                self.codelines.append('\n\t\tself.tkMessage[')
+                self.codelines.append(str(i))
+                self.codelines.append("].config(padx=")
+                self.codelines.append(self.Message.padX)
+                self.codelines.append(")")
+            if self.Message.padY != '':
+                self.codelines.append('\n\t\tself.tkMessage[')
+                self.codelines.append(str(i))
+                self.codelines.append("].config(pady=")
+                self.codelines.append(self.Message.padY)
+                self.codelines.append(")")
+            if self.Message.relief != '':
+                self.codelines.append('\n\t\tself.tkMessage[')
+                self.codelines.append(str(i))
+                self.codelines.append("].config(relief='")
+                self.codelines.append(self.Message.relief)
+                self.codelines.append("')")
+            if self.Message.takeFocus != '':
+                self.codelines.append('\n\t\tself.tkMessage[')
+                self.codelines.append(str(i))
+                self.codelines.append("].config(takefocus='")
+                self.codelines.append(self.Message.takeFocus)
+                self.codelines.append("')")
+            if self.Message.text != '':
+                self.codelines.append('\n\t\tself.tkMessage[')
+                self.codelines.append(str(i))
+                self.codelines.append("].config(text='")
+                self.codelines.append(self.Message.text)
+                self.codelines.append("')")
+            if self.Message.textVariable != '':
+                self.codelines.append('\n\t\tself.tkMessage[')
+                self.codelines.append(str(i))
+                self.codelines.append("].config(textvariable='")
+                self.codelines.append(self.Message.textVariable)
+                self.codelines.append("')")
+            if self.Message.width != '':
+                self.codelines.append('\n\t\tself.tkMessage[')
+                self.codelines.append(str(i))
+                self.codelines.append("].config(width=")
+                self.codelines.append(self.Message.width)
+                self.codelines.append(")")
+            self.codelines.append('\n\t\tself.tkMessage[')
+            self.codelines.append(str(i))
+            self.codelines.append('].place()')
+            if self.MessagePlace.anchor != '':
+                self.codelines.append('\n\t\tself.tkMessage[')
+                self.codelines.append(str(i))
+                self.codelines.append("].place_configure(anchor='")
+                self.codelines.append(self.MessagePlace.anchor)
+                self.codelines.append("')")
+            if self.MessagePlace.borderMode != '':
+                self.codelines.append('\n\t\tself.tkMessage[')
+                self.codelines.append(str(i))
+                self.codelines.append("].place_configure(bordermode='")
+                self.codelines.append(self.MessagePlace.borderMode)
+                self.codelines.append("')")
+            if self.MessagePlace.height != '':
+                self.codelines.append('\n\t\tself.tkMessage[')
+                self.codelines.append(str(i))
+                self.codelines.append('].place_configure(height=')
+                self.codelines.append(self.MessagePlace.height)
+                self.codelines.append(")")
+            if self.MessagePlace.width != '':
+                self.codelines.append('\n\t\tself.tkMessage[')
+                self.codelines.append(str(i))
+                self.codelines.append('].place_configure(width=')
+                self.codelines.append(self.MessagePlace.width)
+                self.codelines.append(")")
+            if self.MessagePlace.relHeight != '':
+                self.codelines.append('\n\t\tself.tkMessage[')
+                self.codelines.append(str(i))
+                self.codelines.append('].place_configure(relheight=')
+                self.codelines.append(self.MessagePlace.relHeight)
+                self.codelines.append(")")
+            if self.MessagePlace.relWidth != '':
+                self.codelines.append('\n\t\tself.tkMessage[')
+                self.codelines.append(str(i))
+                self.codelines.append('].place_configure(relwidth=')
+                self.codelines.append(self.MessagePlace.relWidth)
+                self.codelines.append(")")
+            if self.MessagePlace.relX != '':
+                self.codelines.append('\n\t\tself.tkMessage[')
+                self.codelines.append(str(i))
+                self.codelines.append('].place_configure(relx=')
+                self.codelines.append(self.MessagePlace.relX)
+                self.codelines.append(")")
+            if self.MessagePlace.relY != '':
+                self.codelines.append('\n\t\tself.tkMessage[')
+                self.codelines.append(str(i))
+                self.codelines.append('].place_configure(rely=')
+                self.codelines.append(self.MessagePlace.relY)
+                self.codelines.append(")")
+            if self.MessagePlace.offsetX != '':
+                self.codelines.append('\n\t\tself.tkMessage[')
+                self.codelines.append(str(i))
+                self.codelines.append('].place_configure(x=')
+                self.codelines.append(self.MessagePlace.offsetX)
+                self.codelines.append(")")
+            if self.MessagePlace.offsetY != '':
+                self.codelines.append('\n\t\tself.tkMessage[')
+                self.codelines.append(str(i))
+                self.codelines.append('].place_configure(y=')
+                self.codelines.append(self.MessagePlace.offsetY)
+                self.codelines.append(")")
+                self.codelines.append('\n')
 
 
         ################################################################################################################
         # CALL LOOP TO CREATE TEXT WIDGETS
         ################################################################################################################
-        self.codelines.append("\n\t\tlogging.info('[gui.create_window] Starting frame widget loop')")
-        for i in range(0, self.frameCount):
-            self.Frame.section = str("frame" + str(i+1))
+        self.codelines.append("\n\t\tlogging.info('[gui.create_window] Starting text widget loop')")
+        for i in range(0, self.textCount):
+            self.Text.section = str("text" + str(i+1))
 
             Config = configparser.ConfigParser()
             Config.read(self.inifile)
             dict1 = {}
-            options = Config.options(self.Frame.section)
+            options = Config.options(self.Text.section)
             for option in options:
                 try:
-                    dict1[option] = Config.get(self.Frame.section, option)
+                    dict1[option] = Config.get(self.Text.section, option)
                     if dict1[option] == -1:
                         pass
                 except:
                     dict1[option] = None
+                    
+            self.Text.autoSeparators = dict1['auto separators']
+            self.Text.backgroundColor = dict1['background color']
+            self.Text.backgroundStipple = dict1['background stipple']
+            self.Text.borderwidth = dict1['border width']
+            self.Text.cursor = dict1['cursor']
+            self.Text.exportSelection = dict1['export selection']
+            self.Text.font = dict1['font']
+            self.Text.fontSize = dict1['font size']
+            self.Text.foregroundColor = dict1['foreground color']
+            self.Text.foregroundStipple = dict1['foreground stipple']
+            self.Text.height = dict1['height']
+            self.Text.highlightBackgroundColor = dict1['highlight background color']
+            self.Text.highlightColor = dict1['highlight color']
+            self.Text.highlightThickness = dict1['highlight thickness']
+            self.Text.insertBackground = dict1['insert background']
+            self.Text.insertBorderwidth = dict1['insert border width']
+            self.Text.insertOffTime = dict1['insert off time']
+            self.Text.insertOnTime = dict1['insert on time']
+            self.Text.insertWidth = dict1['insert width']
+            self.Text.justify = dict1['justify']
+            self.Text.lmargin1 = dict1['lmargin1']
+            self.Text.lmargin2 = dict1['lmargin2']
+            self.Text.maxUndo = dict1['max undo']
+            self.Text.padX = dict1['pad x']
+            self.Text.padY = dict1['pad y']
+            self.Text.offset = dict1['offset']
+            self.Text.overstrike = dict1['overstrike']
+            self.Text.relief = dict1['relief']
+            self.Text.rmargin = dict1['rmargin']
+            self.Text.selectBackgroundColor = dict1['select background color']
+            self.Text.selectForegroundColor = dict1['select foreground color']
+            self.Text.selectBorderwidth = dict1['select border width']
+            self.Text.setGrid = dict1['set grid']
+            self.Text.spacing1 = dict1['spacing1']
+            self.Text.spacing2 = dict1['spacing2']
+            self.Text.spacing3 = dict1['spacing3']
+            self.Text.state = dict1['state']
+            self.Text.tabs = dict1['tabs']
+            self.Text.takeFocus = dict1['take focus']
+            self.Text.text = dict1['text']
+            self.Text.text = self.Text.text.replace('\\', '\\\\')
+            self.Text.underline = dict1['underline']
+            self.Text.undo = dict1['undo']
+            self.Text.width = dict1['width']
+            self.Text.wrap = dict1['wrap']
+            self.Text.xScrollCommand = dict1['x scroll command']
+            self.Text.yScrollCommand = dict1['y scroll command']
+            self.TextPlace.anchor = dict1['place anchor']
+            self.TextPlace.borderMode = dict1['place border mode']
+            self.TextPlace.height = dict1['place height']
+            self.TextPlace.width = dict1['place width']
+            self.TextPlace.relHeight = dict1['place rel height']
+            self.TextPlace.relWidth = dict1['place rel width']
+            self.TextPlace.relX = dict1['place rel x']
+            self.TextPlace.relY = dict1['place rel y']
+            self.TextPlace.offsetX = dict1['place offset x']
+            self.TextPlace.offsetY = dict1['place offset y']
+            
+            self.codelines.append("\n\t\tlogging.info('[gui.create_window] Creating text widget #%d' % ")
+            self.codelines.append(str(i+1))
+            self.codelines.append(')')
+            self.codelines.append('\n\t\tself.tkText[')
+            self.codelines.append(str(i))
+            self.codelines.append(']=tk.Text()')
+            if self.Text.autoSeparators != '':
+                self.codelines.append('\n\t\tself.tkText[')
+                self.codelines.append(str(i))
+                self.codelines.append("].config(autoseparators='")
+                self.codelines.append(self.Text.autoSeparators)
+                self.codelines.append("')")
+            if self.Text.backgroundColor != '':
+                self.codelines.append('\n\t\tself.tkText[')
+                self.codelines.append(str(i))
+                self.codelines.append("].config(bg='")
+                self.codelines.append(self.Text.backgroundColor)
+                self.codelines.append("')")
+            if self.Text.backgroundStipple != '':
+                self.codelines.append('\n\t\tself.tkText[')
+                self.codelines.append(str(i))
+                self.codelines.append("].config(bgstipple='")
+                self.codelines.append(self.Text.backgroundStipple)
+                self.codelines.append("')")
+            if self.Text.borderwidth != '':
+                self.codelines.append('\n\t\tself.tkText[')
+                self.codelines.append(str(i))
+                self.codelines.append("].config(bd=")
+                self.codelines.append(self.Text.borderwidth)
+                self.codelines.append(")")
+            if self.Text.foregroundStipple != '':
+                self.codelines.append('\n\t\tself.tkText[')
+                self.codelines.append(str(i))
+                self.codelines.append("].config(fgstipple='")
+                self.codelines.append(self.Text.foregroundStipple)
+                self.codelines.append("')")
+            if self.Text.cursor != '':
+                self.codelines.append('\n\t\tself.tkText[')
+                self.codelines.append(str(i))
+                self.codelines.append("].config(cursor='")
+                self.codelines.append(self.Text.cursor)
+                self.codelines.append("')")
+            if self.Text.exportSelection != '':
+                self.codelines.append('\n\t\tself.tkText[')
+                self.codelines.append(str(i))
+                self.codelines.append("].config(exportselection='")
+                self.codelines.append(self.Text.exportSelection)
+                self.codelines.append("')")
+            if self.Text.font != '':
+                self.codelines.append('\n\t\tself.tkText[')
+                self.codelines.append(str(i))
+                self.codelines.append("].config(font=('")
+                self.codelines.append(self.Text.font)
+                self.codelines.append("', ")
+                self.codelines.append(self.Text.fontSize)
+                self.codelines.append("))")
+            if self.Text.foregroundColor != '':
+                self.codelines.append('\n\t\tself.tkText[')
+                self.codelines.append(str(i))
+                self.codelines.append("].config(foreground='")
+                self.codelines.append(self.Text.foregroundColor)
+                self.codelines.append("')")
+            if self.Text.height != '':
+                self.codelines.append('\n\t\tself.tkText[')
+                self.codelines.append(str(i))
+                self.codelines.append("].config(height=")
+                self.codelines.append(self.Text.height)
+                self.codelines.append(")")
+            if self.Text.highlightBackgroundColor != '':
+                self.codelines.append('\n\t\tself.tkText[')
+                self.codelines.append(str(i))
+                self.codelines.append("].config(highlightbackground='")
+                self.codelines.append(self.Text.highlightBackgroundColor)
+                self.codelines.append("')")
+            if self.Text.highlightColor != '':
+                self.codelines.append('\n\t\tself.tkText[')
+                self.codelines.append(str(i))
+                self.codelines.append("].config(highlightcolor='")
+                self.codelines.append(self.Text.highlightColor)
+                self.codelines.append("')")
+            if self.Text.highlightThickness != '':
+                self.codelines.append('\n\t\tself.tkText[')
+                self.codelines.append(str(i))
+                self.codelines.append("].config(highlightthickness=")
+                self.codelines.append(self.Text.highlightThickness)
+                self.codelines.append(")")
+            if self.Text.insertBackground != '':
+                self.codelines.append('\n\t\tself.tkText[')
+                self.codelines.append(str(i))
+                self.codelines.append("].config(insertbackground='")
+                self.codelines.append(self.Text.insertBackground)
+                self.codelines.append("')")
+            if self.Text.insertBorderwidth != '':
+                self.codelines.append('\n\t\tself.tkText[')
+                self.codelines.append(str(i))
+                self.codelines.append("].config(insertbackground='")
+                self.codelines.append(self.Text.insertBorderwidth)
+                self.codelines.append("')")
+            if self.Text.insertOffTime != '':
+                self.codelines.append('\n\t\tself.tkText[')
+                self.codelines.append(str(i))
+                self.codelines.append("].config(insertofftime=")
+                self.codelines.append(self.Text.insertOffTime)
+                self.codelines.append(")")
+            if self.Text.insertOnTime != '':
+                self.codelines.append('\n\t\tself.tkText[')
+                self.codelines.append(str(i))
+                self.codelines.append("].config(insertontime=")
+                self.codelines.append(self.Text.insertOnTime)
+                self.codelines.append(")")
+            if self.Text.insertWidth != '':
+                self.codelines.append('\n\t\tself.tkText[')
+                self.codelines.append(str(i))
+                self.codelines.append("].config(insertwidth=")
+                self.codelines.append(self.Text.insertWidth)
+                self.codelines.append(")")
+            if self.Text.lmargin1 != '':
+                self.codelines.append('\n\t\tself.tkText[')
+                self.codelines.append(str(i))
+                self.codelines.append("].config(lmargin1=")
+                self.codelines.append(self.Text.lmargin1)
+                self.codelines.append(")")
+            if self.Text.lmargin2 != '':
+                self.codelines.append('\n\t\tself.tkText[')
+                self.codelines.append(str(i))
+                self.codelines.append("].config(lmargin2=")
+                self.codelines.append(self.Text.lmargin2)
+                self.codelines.append(")")
+            if self.Text.maxUndo != '':
+                self.codelines.append('\n\t\tself.tkText[')
+                self.codelines.append(str(i))
+                self.codelines.append("].config(maxundo=")
+                self.codelines.append(self.Text.maxUndo)
+                self.codelines.append(")")
+            if self.Text.padX != '':
+                self.codelines.append('\n\t\tself.tkText[')
+                self.codelines.append(str(i))
+                self.codelines.append("].config(padx=")
+                self.codelines.append(self.Text.padX)
+                self.codelines.append(")")
+            if self.Text.padY != '':
+                self.codelines.append('\n\t\tself.tkText[')
+                self.codelines.append(str(i))
+                self.codelines.append("].config(pady=")
+                self.codelines.append(self.Text.padY)
+                self.codelines.append(")")
+            if self.Text.offset != '':
+                self.codelines.append('\n\t\tself.tkText[')
+                self.codelines.append(str(i))
+                self.codelines.append("].config(offset=")
+                self.codelines.append(self.Text.offset)
+                self.codelines.append(")")
+            if self.Text.overstrike != '':
+                self.codelines.append('\n\t\tself.tkText[')
+                self.codelines.append(str(i))
+                self.codelines.append("].config(overstrike='")
+                self.codelines.append(self.Text.overstrike)
+                self.codelines.append("')")
+            if self.Text.selectBackgroundColor != '':
+                self.codelines.append('\n\t\tself.tkText[')
+                self.codelines.append(str(i))
+                self.codelines.append("].config(selectbackground='")
+                self.codelines.append(self.Text.selectBackgroundColor)
+                self.codelines.append("')")
+            if self.Text.selectForegroundColor != '':
+                self.codelines.append('\n\t\tself.tkText[')
+                self.codelines.append(str(i))
+                self.codelines.append("].config(selectforeground='")
+                self.codelines.append(self.Text.selectForegroundColor)
+                self.codelines.append("')")
+            if self.Text.selectBorderwidth != '':
+                self.codelines.append('\n\t\tself.tkText[')
+                self.codelines.append(str(i))
+                self.codelines.append("].config(selectborderwidth=")
+                self.codelines.append(self.Text.selectBorderwidth)
+                self.codelines.append(")")
+            if self.Text.setGrid != '':
+                self.codelines.append('\n\t\tself.tkText[')
+                self.codelines.append(str(i))
+                self.codelines.append("].config(setgrid='")
+                self.codelines.append(self.Text.setGrid)
+                self.codelines.append("')")
+            if self.Text.spacing1 != '':
+                self.codelines.append('\n\t\tself.tkText[')
+                self.codelines.append(str(i))
+                self.codelines.append("].config(spacing1=")
+                self.codelines.append(self.Text.spacing1)
+                self.codelines.append(")")
+            if self.Text.spacing2 != '':
+                self.codelines.append('\n\t\tself.tkText[')
+                self.codelines.append(str(i))
+                self.codelines.append("].config(spacing2=")
+                self.codelines.append(self.Text.spacing2)
+                self.codelines.append(")")
+            if self.Text.spacing3 != '':
+                self.codelines.append('\n\t\tself.tkText[')
+                self.codelines.append(str(i))
+                self.codelines.append("].config(spacing3=")
+                self.codelines.append(self.Text.spacing3)
+                self.codelines.append(")")
+            if self.Text.state != '':
+                self.codelines.append('\n\t\tself.tkText[')
+                self.codelines.append(str(i))
+                self.codelines.append("].config(state='")
+                self.codelines.append(self.Text.state)
+                self.codelines.append("')")
+            if self.Text.tabs != '':
+                self.codelines.append('\n\t\tself.tkText[')
+                self.codelines.append(str(i))
+                self.codelines.append("].config(tabs='")
+                self.codelines.append(self.Text.tabs)
+                self.codelines.append("')")
+            if self.Text.takeFocus != '':
+                self.codelines.append('\n\t\tself.tkText[')
+                self.codelines.append(str(i))
+                self.codelines.append("].config(takefocus='")
+                self.codelines.append(self.Text.takeFocus)
+                self.codelines.append("')")
+            if self.Text.text != '':
+                self.codelines.append('\n\t\tself.tkText[')
+                self.codelines.append(str(i))
+                self.codelines.append('].insert(tk.END, "')
+                self.codelines.append(self.Text.text)
+                self.codelines.append('")')
+            if self.Text.underline != '':
+                self.codelines.append('\n\t\tself.tkText[')
+                self.codelines.append(str(i))
+                self.codelines.append("].config(underline='")
+                self.codelines.append(self.Text.underline)
+                self.codelines.append("')")
+            if self.Text.undo != '':
+                self.codelines.append('\n\t\tself.tkText[')
+                self.codelines.append(str(i))
+                self.codelines.append("].config(undo='")
+                self.codelines.append(self.Text.undo)
+                self.codelines.append("')")
+            if self.Text.width != '':
+                self.codelines.append('\n\t\tself.tkText[')
+                self.codelines.append(str(i))
+                self.codelines.append("].config(width=")
+                self.codelines.append(self.Text.width)
+                self.codelines.append(")")
+            if self.Text.wrap != '':
+                self.codelines.append('\n\t\tself.tkText[')
+                self.codelines.append(str(i))
+                self.codelines.append("].config(wrap='")
+                self.codelines.append(self.Text.wrap)
+                self.codelines.append("')")
+            if self.Text.xScrollCommand != '':
+                self.codelines.append('\n\t\tself.tkText[')
+                self.codelines.append(str(i))
+                self.codelines.append("].config(xscrollcommand='")
+                self.codelines.append(self.Text.xScrollCommand)
+                self.codelines.append("')")
+            if self.Text.yScrollCommand != '':
+                self.codelines.append('\n\t\tself.tkText[')
+                self.codelines.append(str(i))
+                self.codelines.append("].config(yscrollcommand='")
+                self.codelines.append(self.Text.yScrollCommand)
+                self.codelines.append("')")
+
+            self.codelines.append('\n\t\tself.tkText[')
+            self.codelines.append(str(i))
+            self.codelines.append('].place()')
+            if self.TextPlace.anchor != '':
+                self.codelines.append('\n\t\tself.tkText[')
+                self.codelines.append(str(i))
+                self.codelines.append("].place_configure(anchor='")
+                self.codelines.append(self.TextPlace.anchor)
+                self.codelines.append("')")
+            if self.TextPlace.borderMode != '':
+                self.codelines.append('\n\t\tself.tkText[')
+                self.codelines.append(str(i))
+                self.codelines.append("].place_configure(bordermode='")
+                self.codelines.append(self.TextPlace.borderMode)
+                self.codelines.append("')")
+            if self.TextPlace.height != '':
+                self.codelines.append('\n\t\tself.tkText[')
+                self.codelines.append(str(i))
+                self.codelines.append('].place_configure(height=')
+                self.codelines.append(self.TextPlace.height)
+                self.codelines.append(")")
+            if self.TextPlace.width != '':
+                self.codelines.append('\n\t\tself.tkText[')
+                self.codelines.append(str(i))
+                self.codelines.append('].place_configure(width=')
+                self.codelines.append(self.TextPlace.width)
+                self.codelines.append(")")
+            if self.TextPlace.relHeight != '':
+                self.codelines.append('\n\t\tself.tkText[')
+                self.codelines.append(str(i))
+                self.codelines.append('].place_configure(relheight=')
+                self.codelines.append(self.TextPlace.relHeight)
+                self.codelines.append(")")
+            if self.TextPlace.relWidth != '':
+                self.codelines.append('\n\t\tself.tkText[')
+                self.codelines.append(str(i))
+                self.codelines.append('].place_configure(relwidth=')
+                self.codelines.append(self.TextPlace.relWidth)
+                self.codelines.append(")")
+            if self.TextPlace.relX != '':
+                self.codelines.append('\n\t\tself.tkText[')
+                self.codelines.append(str(i))
+                self.codelines.append('].place_configure(relx=')
+                self.codelines.append(self.TextPlace.relX)
+                self.codelines.append(")")
+            if self.TextPlace.relY != '':
+                self.codelines.append('\n\t\tself.tkText[')
+                self.codelines.append(str(i))
+                self.codelines.append('].place_configure(rely=')
+                self.codelines.append(self.TextPlace.relY)
+                self.codelines.append(")")
+            if self.TextPlace.offsetX != '':
+                self.codelines.append('\n\t\tself.tkText[')
+                self.codelines.append(str(i))
+                self.codelines.append('].place_configure(x=')
+                self.codelines.append(self.TextPlace.offsetX)
+                self.codelines.append(")")
+            if self.TextPlace.offsetY != '':
+                self.codelines.append('\n\t\tself.tkText[')
+                self.codelines.append(str(i))
+                self.codelines.append('].place_configure(y=')
+                self.codelines.append(self.TextPlace.offsetY)
+                self.codelines.append(")")
+                self.codelines.append('\n')
+            
+            
+            
 
 
         ################################################################################################################
         # CALL LOOP TO CREATE BUTTON WIDGETS
         ################################################################################################################
-        self.codelines.append("\n\t\tlogging.info('[gui.create_window] Starting frame widget loop')")
-        for i in range(0, self.frameCount):
-            self.Frame.section = str("frame" + str(i+1))
+        self.codelines.append("\n\t\tlogging.info('[gui.create_window] Starting button widget loop')")
+        for i in range(0, self.buttonCount):
+            self.Button.section = str("button" + str(i+1))
 
             Config = configparser.ConfigParser()
             Config.read(self.inifile)
             dict1 = {}
-            options = Config.options(self.Frame.section)
+            options = Config.options(self.Button.section)
             for option in options:
                 try:
-                    dict1[option] = Config.get(self.Frame.section, option)
+                    dict1[option] = Config.get(self.Button.section, option)
                     if dict1[option] == -1:
                         pass
                 except:
                     dict1[option] = None
+            
+            self.Button.backgroundColor = dict1['background color']
+            self.Button.bitmap = dict1['bitmap']
+            self.Button.borderwidth = dict1['border width']
+            self.Button.command = dict1['command']
+            self.Button.compound = dict1['compound']
+            self.Button.cursor = dict1['cursor']
+            self.Button.default = dict1['default']
+            self.Button.disableForeground = dict1['disable foreground']
+            self.Button.font = dict1['font']
+            self.Button.fontSize = dict1['font size']
+            self.Button.foregroundColor = dict1['foreground color']
+            self.Button.height = dict1['height']
+            self.Button.highlightBackgroundColor = dict1['highlight background color']
+            self.Button.highlightColor = dict1['highlight color']
+            self.Button.highlightThickness = dict1['highlight thickness']
+            self.Button.image = dict1['image']
+            self.Button.justify = dict1['justify']
+            self.Button.overRelief = dict1['over relief']
+            self.Button.padX = dict1['pad x']
+            self.Button.padY = dict1['pad y']
+            self.Button.relief = dict1['relief']
+            self.Button.repeatDelay = dict1['repeat delay']
+            self.Button.repeatInterval = dict1['repeat interval']
+            self.Button.state = dict1['state']
+            self.Button.takeFocus = dict1['take focus']
+            self.Button.text = dict1['text']
+            self.Button.text = self.Button.text.replace('\\', '\\\\')
+            self.Button.textVariable = dict1['text variable']
+            self.Button.underline = dict1['underline']
+            self.Button.width = dict1['width']
+            self.Button.wrapLength = dict1['wrap length']
+            self.ButtonPlace.anchor = dict1['place anchor']
+            self.ButtonPlace.borderMode = dict1['place border mode']
+            self.ButtonPlace.height = dict1['place height']
+            self.ButtonPlace.width = dict1['place width']
+            self.ButtonPlace.relHeight = dict1['place rel height']
+            self.ButtonPlace.relWidth = dict1['place rel width']
+            self.ButtonPlace.relX = dict1['place rel x']
+            self.ButtonPlace.relY = dict1['place rel y']
+            self.ButtonPlace.offsetX = dict1['place offset x']
+            self.ButtonPlace.offsetY = dict1['place offset y']
+
+            self.codelines.append("\n\t\tlogging.info('[gui.create_window] Creating button widget #%d' % ")
+            self.codelines.append(str(i+1))
+            self.codelines.append(')')
+            self.codelines.append('\n\t\tself.tkButton[')
+            self.codelines.append(str(i))
+            self.codelines.append(']=tk.Button()')
+            if self.Button.backgroundColor != '':
+                self.codelines.append('\n\t\tself.tkButton[')
+                self.codelines.append(str(i))
+                self.codelines.append("].config(background='")
+                self.codelines.append(self.Button.backgroundColor)
+                self.codelines.append("')")
+            if self.Button.bitmap != '':
+                self.codelines.append('\n\t\tself.tkButton[')
+                self.codelines.append(str(i))
+                self.codelines.append("].config(bitmap='")
+                self.codelines.append(self.Button.bitmap)
+                self.codelines.append("')")
+            if self.Button.borderwidth != '':
+                self.codelines.append('\n\t\tself.tkButton[')
+                self.codelines.append(str(i))
+                self.codelines.append("].config(borderwidth='")
+                self.codelines.append(self.Button.borderwidth)
+                self.codelines.append("')")
+            if self.Button.command != '':
+                self.codelines.append('\n\t\tself.tkButton[')
+                self.codelines.append(str(i))
+                self.codelines.append("].config(command=lambda instance=")
+                self.codelines.append(self.Button.command)
+                self.codelines.append(": gui.callback(self, instance))")
+            if self.Button.compound != '':
+                self.codelines.append('\n\t\tself.tkButton[')
+                self.codelines.append(str(i))
+                self.codelines.append("].config(compound='")
+                self.codelines.append(self.Button.compound)
+                self.codelines.append("')")
+            if self.Button.cursor != '':
+                self.codelines.append('\n\t\tself.tkButton[')
+                self.codelines.append(str(i))
+                self.codelines.append("].config(cursor='")
+                self.codelines.append(self.Button.cursor)
+                self.codelines.append("')")
+            if self.Button.default != '':
+                self.codelines.append('\n\t\tself.tkButton[')
+                self.codelines.append(str(i))
+                self.codelines.append("].config(default='")
+                self.codelines.append(self.Button.default)
+                self.codelines.append("')")
+            if self.Button.disableForeground != '':
+                self.codelines.append('\n\t\tself.tkButton[')
+                self.codelines.append(str(i))
+                self.codelines.append("].config(disableforeground='")
+                self.codelines.append(self.Button.disableForeground)
+                self.codelines.append("')")
+            if self.Button.font != '':
+                self.codelines.append('\n\t\tself.tkButton[')
+                self.codelines.append(str(i))
+                self.codelines.append("].config(font=('")
+                self.codelines.append(self.Button.font)
+                self.codelines.append("', ")
+                self.codelines.append(self.Button.fontSize)
+                self.codelines.append("))")
+            if self.Button.foregroundColor != '':
+                self.codelines.append('\n\t\tself.tkButton[')
+                self.codelines.append(str(i))
+                self.codelines.append("].config(foreground='")
+                self.codelines.append(self.Button.foregroundColor)
+                self.codelines.append("')")
+            if self.Button.height != '':
+                self.codelines.append('\n\t\tself.tkButton[')
+                self.codelines.append(str(i))
+                self.codelines.append("].config(height=")
+                self.codelines.append(self.Button.height)
+                self.codelines.append(")")
+            if self.Button.highlightBackgroundColor != '':
+                self.codelines.append('\n\t\tself.tkButton[')
+                self.codelines.append(str(i))
+                self.codelines.append("].config(highlightbackground='")
+                self.codelines.append(self.Button.highlightBackgroundColor)
+                self.codelines.append("')")
+            if self.Button.highlightColor != '':
+                self.codelines.append('\n\t\tself.tkButton[')
+                self.codelines.append(str(i))
+                self.codelines.append("].config(highlightColor='")
+                self.codelines.append(self.Button.highlightColor)
+                self.codelines.append("')")
+            if self.Button.highlightThickness != '':
+                self.codelines.append('\n\t\tself.tkButton[')
+                self.codelines.append(str(i))
+                self.codelines.append("].config(highlightthickness=")
+                self.codelines.append(self.Button.highlightThickness)
+                self.codelines.append(")")
+            if self.Button.image != '':
+                self.codelines.append('\n\t\tself.tkButton[')
+                self.codelines.append(str(i))
+                self.codelines.append("].config(image='")
+                self.codelines.append(self.Button.image)
+                self.codelines.append("')")
+            if self.Button.justify != '':
+                self.codelines.append('\n\t\tself.tkButton[')
+                self.codelines.append(str(i))
+                self.codelines.append("].config(justify='")
+                self.codelines.append(self.Button.justify)
+                self.codelines.append("')")
+            if self.Button.overRelief != '':
+                self.codelines.append('\n\t\tself.tkButton[')
+                self.codelines.append(str(i))
+                self.codelines.append("].config(overrelief='")
+                self.codelines.append(self.Button.overRelief)
+                self.codelines.append("')")
+            if self.Button.padX != '':
+                self.codelines.append('\n\t\tself.tkButton[')
+                self.codelines.append(str(i))
+                self.codelines.append("].config(padx=")
+                self.codelines.append(self.Button.padX)
+                self.codelines.append(")")
+            if self.Button.padY != '':
+                self.codelines.append('\n\t\tself.tkButton[')
+                self.codelines.append(str(i))
+                self.codelines.append("].config(pady=")
+                self.codelines.append(self.Button.padY)
+                self.codelines.append(")")
+            if self.Button.relief != '':
+                self.codelines.append('\n\t\tself.tkButton[')
+                self.codelines.append(str(i))
+                self.codelines.append("].config(relief='")
+                self.codelines.append(self.Button.relief)
+                self.codelines.append("')")
+            if self.Button.repeatDelay != '':
+                self.codelines.append('\n\t\tself.tkButton[')
+                self.codelines.append(str(i))
+                self.codelines.append("].config(repeatdelay=")
+                self.codelines.append(self.Button.repeatDelay)
+                self.codelines.append(")")
+            if self.Button.repeatInterval != '':
+                self.codelines.append('\n\t\tself.tkButton[')
+                self.codelines.append(str(i))
+                self.codelines.append("].config(repeatinterval=")
+                self.codelines.append(self.Button.repeatInterval)
+                self.codelines.append(")")
+            if self.Button.state != '':
+                self.codelines.append('\n\t\tself.tkButton[')
+                self.codelines.append(str(i))
+                self.codelines.append("].config(state='")
+                self.codelines.append(self.Button.state)
+                self.codelines.append("')")
+            if self.Button.takeFocus != '':
+                self.codelines.append('\n\t\tself.tkButton[')
+                self.codelines.append(str(i))
+                self.codelines.append("].config(takefocus='")
+                self.codelines.append(self.Button.takeFocus)
+                self.codelines.append("')")
+            if self.Button.text != '':
+                self.codelines.append('\n\t\tself.tkButton[')
+                self.codelines.append(str(i))
+                self.codelines.append("].config(text='")
+                self.codelines.append(self.Button.text)
+                self.codelines.append("')")
+            if self.Button.textVariable != '':
+                self.codelines.append('\n\t\tself.tkButton[')
+                self.codelines.append(str(i))
+                self.codelines.append("].config(textvariable='")
+                self.codelines.append(self.Button.textVariable)
+                self.codelines.append("')")
+            if self.Button.underline != '':
+                self.codelines.append('\n\t\tself.tkButton[')
+                self.codelines.append(str(i))
+                self.codelines.append("].config(underline='")
+                self.codelines.append(self.Button.underline)
+                self.codelines.append("')")
+            if self.Button.width != '':
+                self.codelines.append('\n\t\tself.tkButton[')
+                self.codelines.append(str(i))
+                self.codelines.append("].config(width=")
+                self.codelines.append(self.Button.width)
+                self.codelines.append(")")
+            if self.Button.wrapLength != '':
+                self.codelines.append('\n\t\tself.tkButton[')
+                self.codelines.append(str(i))
+                self.codelines.append("].config(wraplength='")
+                self.codelines.append(self.Button.wrapLength)
+                self.codelines.append("')")
+
+            self.codelines.append('\n\t\tself.tkButton[')
+            self.codelines.append(str(i))
+            self.codelines.append('].place()')
+            if self.ButtonPlace.anchor != '':
+                self.codelines.append('\n\t\tself.tkButton[')
+                self.codelines.append(str(i))
+                self.codelines.append("].place_configure(anchor='")
+                self.codelines.append(self.ButtonPlace.anchor)
+                self.codelines.append("')")
+            if self.ButtonPlace.borderMode != '':
+                self.codelines.append('\n\t\tself.tkButton[')
+                self.codelines.append(str(i))
+                self.codelines.append("].place_configure(bordermode='")
+                self.codelines.append(self.ButtonPlace.borderMode)
+                self.codelines.append("')")
+            if self.ButtonPlace.height != '':
+                self.codelines.append('\n\t\tself.tkButton[')
+                self.codelines.append(str(i))
+                self.codelines.append('].place_configure(height=')
+                self.codelines.append(self.ButtonPlace.height)
+                self.codelines.append(")")
+            if self.ButtonPlace.width != '':
+                self.codelines.append('\n\t\tself.tkButton[')
+                self.codelines.append(str(i))
+                self.codelines.append('].place_configure(width=')
+                self.codelines.append(self.ButtonPlace.width)
+                self.codelines.append(")")
+            if self.ButtonPlace.relHeight != '':
+                self.codelines.append('\n\t\tself.tkButton[')
+                self.codelines.append(str(i))
+                self.codelines.append('].place_configure(relheight=')
+                self.codelines.append(self.ButtonPlace.relHeight)
+                self.codelines.append(")")
+            if self.ButtonPlace.relWidth != '':
+                self.codelines.append('\n\t\tself.tkButton[')
+                self.codelines.append(str(i))
+                self.codelines.append('].place_configure(relwidth=')
+                self.codelines.append(self.ButtonPlace.relWidth)
+                self.codelines.append(")")
+            if self.ButtonPlace.relX != '':
+                self.codelines.append('\n\t\tself.tkButton[')
+                self.codelines.append(str(i))
+                self.codelines.append('].place_configure(relx=')
+                self.codelines.append(self.ButtonPlace.relX)
+                self.codelines.append(")")
+            if self.ButtonPlace.relY != '':
+                self.codelines.append('\n\t\tself.tkButton[')
+                self.codelines.append(str(i))
+                self.codelines.append('].place_configure(rely=')
+                self.codelines.append(self.ButtonPlace.relY)
+                self.codelines.append(")")
+            if self.ButtonPlace.offsetX != '':
+                self.codelines.append('\n\t\tself.tkButton[')
+                self.codelines.append(str(i))
+                self.codelines.append('].place_configure(x=')
+                self.codelines.append(self.ButtonPlace.offsetX)
+                self.codelines.append(")")
+            if self.ButtonPlace.offsetY != '':
+                self.codelines.append('\n\t\tself.tkButton[')
+                self.codelines.append(str(i))
+                self.codelines.append('].place_configure(y=')
+                self.codelines.append(self.ButtonPlace.offsetY)
+                self.codelines.append(")")
+                self.codelines.append('\n')
 
 
         ################################################################################################################
         # ADD CALL FOR TKINTER MAIN LOOP TO SPAWN APP WINDOW
         ################################################################################################################
         self.codelines.append('\n\t\tself.root.mainloop()')
+        self.codelines.append('\n')
+        self.codelines.append('\n')
+
+
+        ################################################################################################################
+        # ADD BUTTON CALLBACK METHOD
+        ################################################################################################################
+        self.codelines.append('\n\tdef callback(self, instance):')
+        self.codelines.append('\n\t\tself.instance = instance')
+        self.codelines.append('\n')
+        for i in range(0, self.buttonCount):
+            self.codelines.append('\n\t\tif self.instance == ')
+            self.codelines.append(str(i+1))
+            self.codelines.append(':')
+            self.codelines.append("\n\t\t\tlogging.info('[gui.callback] Button %d pressed' % ")
+            self.codelines.append(str(i+1))
+            self.codelines.append(")")
+            if i == 0:
+                self.codelines.append('\n\t\t\tgui.kill_root(self)')
+            self.codelines.append('\n')
+        self.codelines.append('\n')
+
+
+        ################################################################################################################
+        # ADD OTHER HELPFUL METHODS
+        ################################################################################################################
+        self.codelines.append('\n\tdef return_root(self):')
+        self.codelines.append('\n\t\treturn self.root')
+        self.codelines.append('\n')
+        self.codelines.append('\n')
+
+        self.codelines.append('\n\tdef kill_root(self):')
+        self.codelines.append('\n\t\tself.root.destroy()')
+        self.codelines.append('\n\t\treturn')
+        self.codelines.append('\n')
+        self.codelines.append('\n')
+
+        self.codelines.append('\n\tdef return_text(self, field):')
+        self.codelines.append('\n\t\tself.field = field')
+        self.codelines.append('\n\t\tself.address = self.field-1')
+        self.codelines.append('\n\t\treturn self.tkText[self.address].get("1.0", tk.END)')
+        self.codelines.append('\n')
+        self.codelines.append('\n')
+
+        self.codelines.append('\n\tdef write_text(self, field, text_to_write):')
+        self.codelines.append('\n\t\tself.field = field')
+        self.codelines.append('\n\t\tself.address = self.field-1')
+        self.codelines.append('\n\t\tself.text_to_write = text_to_write')
+        self.codelines.append('\n\t\tif self.text_to_write != self.text_to_write_mem:')
+        self.codelines.append('\n\t\t\tself.tkText[self.address].insert(tk.END, self.text_to_write)')
+        self.codelines.append('\n\t\t\tself.text_to_write_mem = self.text_to_write')
+        self.codelines.append('\n\t\treturn')
+        self.codelines.append('\n')
+        self.codelines.append('\n')
+
+        self.codelines.append('\n\tdef clear_text(self, field):')
+        self.codelines.append('\n\t\tself.field = field')
+        self.codelines.append('\n\t\tself.address = self.field-1')
+        self.codelines.append('\n\t\tself.tkText[self.address].delete("1.0", tk.END)')
+        self.codelines.append('\n\t\treturn')
+        self.codelines.append('\n')
+        self.codelines.append('\n')
 
 
         ################################################################################################################

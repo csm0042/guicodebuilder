@@ -195,6 +195,8 @@ class gui(object):
 		self.Text = Text()
 		self.text_settings = Text()
 		self.TextPlace = Place()
+		self.Text_to_write = str()
+		self.Text_to_write_mem = str()
 		self.tkText = [tk.Text() for i in range(self.textCount)]
 		logging.info('[gui.__init__] Found configuration data for %d text widgets' % self.textCount)
 
@@ -203,7 +205,6 @@ class gui(object):
 		self.button_settings = Button()
 		self.ButtonPlace = Place()
 		self.tkButton = [tk.Button() for i in range(self.buttonCount)]
-		self.ButtonInput = [bool() for i in range(self.buttonCount)]
 		logging.info('[gui.__init__] Found configuration data for %d button widgets' % self.buttonCount)
 
 
@@ -231,7 +232,6 @@ class gui(object):
 		self.tkFrame[0].place_configure(x=2)
 		self.tkFrame[0].place_configure(y=2)
 
-
 		logging.info('[gui.create_window] Creating frame widget #%d' % 2)
 		self.tkFrame[1]=tk.Frame()
 		self.tkFrame[1].config(borderwidth=2)
@@ -243,7 +243,6 @@ class gui(object):
 		self.tkFrame[1].place_configure(bordermode='inside')
 		self.tkFrame[1].place_configure(x=2)
 		self.tkFrame[1].place_configure(y=94)
-
 
 		logging.info('[gui.create_window] Creating frame widget #%d' % 3)
 		self.tkFrame[2]=tk.Frame()
@@ -257,8 +256,240 @@ class gui(object):
 		self.tkFrame[2].place_configure(x=2)
 		self.tkFrame[2].place_configure(y=203)
 
+		logging.info('[gui.create_window] Starting message widget loop')
+		logging.info('[gui.create_window] Creating message widget #%d' % 1)
+		self.tkMessage[0]=tk.Message()
+		self.tkMessage[0].config(anchor='nw')
+		self.tkMessage[0].config(font=('Aerial', 8))
+		self.tkMessage[0].config(foreground='black')
+		self.tkMessage[0].config(highlightthickness=1)
+		self.tkMessage[0].config(text='This application searches a directory structure for files of type PNG, JPG, BMP, or GIF and verifies their filenames comply with a specific naming convention.  If the filenames do not meet the proper format, the file is automatically renamed to meet the desired format.  The directory to scan is a user-entered variable.')
+		self.tkMessage[0].config(width=410)
+		self.tkMessage[0].place()
+		self.tkMessage[0].place_configure(anchor='nw')
+		self.tkMessage[0].place_configure(bordermode='inside')
+		self.tkMessage[0].place_configure(height=60)
+		self.tkMessage[0].place_configure(width=410)
+		self.tkMessage[0].place_configure(x=10)
+		self.tkMessage[0].place_configure(y=10)
+
+		logging.info('[gui.create_window] Creating message widget #%d' % 2)
+		self.tkMessage[1]=tk.Message()
+		self.tkMessage[1].config(anchor='nw')
+		self.tkMessage[1].config(font=('Aerial', 8))
+		self.tkMessage[1].config(foreground='black')
+		self.tkMessage[1].config(highlightthickness=1)
+		self.tkMessage[1].config(text='Root directory to scan:')
+		self.tkMessage[1].config(width=150)
+		self.tkMessage[1].place()
+		self.tkMessage[1].place_configure(anchor='nw')
+		self.tkMessage[1].place_configure(bordermode='inside')
+		self.tkMessage[1].place_configure(height=20)
+		self.tkMessage[1].place_configure(width=150)
+		self.tkMessage[1].place_configure(x=5)
+		self.tkMessage[1].place_configure(y=107)
+
+		logging.info('[gui.create_window] Creating message widget #%d' % 3)
+		self.tkMessage[2]=tk.Message()
+		self.tkMessage[2].config(anchor='nw')
+		self.tkMessage[2].config(font=('Aerial', 8))
+		self.tkMessage[2].config(foreground='black')
+		self.tkMessage[2].config(highlightthickness=1)
+		self.tkMessage[2].config(text='File-types to include:')
+		self.tkMessage[2].config(width=150)
+		self.tkMessage[2].place()
+		self.tkMessage[2].place_configure(anchor='nw')
+		self.tkMessage[2].place_configure(bordermode='inside')
+		self.tkMessage[2].place_configure(height=20)
+		self.tkMessage[2].place_configure(width=150)
+		self.tkMessage[2].place_configure(x=5)
+		self.tkMessage[2].place_configure(y=137)
+
+		logging.info('[gui.create_window] Creating message widget #%d' % 4)
+		self.tkMessage[3]=tk.Message()
+		self.tkMessage[3].config(anchor='nw')
+		self.tkMessage[3].config(font=('Aerial', 8))
+		self.tkMessage[3].config(foreground='black')
+		self.tkMessage[3].config(highlightthickness=1)
+		self.tkMessage[3].config(text='Include sub-folders?:')
+		self.tkMessage[3].config(width=150)
+		self.tkMessage[3].place()
+		self.tkMessage[3].place_configure(anchor='nw')
+		self.tkMessage[3].place_configure(bordermode='inside')
+		self.tkMessage[3].place_configure(height=20)
+		self.tkMessage[3].place_configure(width=150)
+		self.tkMessage[3].place_configure(x=5)
+		self.tkMessage[3].place_configure(y=167)
+
+		logging.info('[gui.create_window] Starting text widget loop')
+		logging.info('[gui.create_window] Creating text widget #%d' % 1)
+		self.tkText[0]=tk.Text()
+		self.tkText[0].config(bg='white')
+		self.tkText[0].config(bd=2)
+		self.tkText[0].config(font=('Aerial', 8))
+		self.tkText[0].config(foreground='black')
+		self.tkText[0].config(height=28)
+		self.tkText[0].config(padx=5)
+		self.tkText[0].config(pady=5)
+		self.tkText[0].config(state='normal')
+		self.tkText[0].insert(tk.END, "C:\\Users\\cmaue\\OneDrive\\Pictures\\_New")
+		self.tkText[0].config(width=362)
+		self.tkText[0].config(wrap='word')
+		self.tkText[0].place()
+		self.tkText[0].place_configure(anchor='nw')
+		self.tkText[0].place_configure(bordermode='inside')
+		self.tkText[0].place_configure(height=28)
+		self.tkText[0].place_configure(width=362)
+		self.tkText[0].place_configure(x=130)
+		self.tkText[0].place_configure(y=105)
+
+		logging.info('[gui.create_window] Creating text widget #%d' % 2)
+		self.tkText[1]=tk.Text()
+		self.tkText[1].config(bg='black')
+		self.tkText[1].config(bd=2)
+		self.tkText[1].config(font=('Aerial', 8))
+		self.tkText[1].config(foreground='white')
+		self.tkText[1].config(height=370)
+		self.tkText[1].config(padx=5)
+		self.tkText[1].config(pady=5)
+		self.tkText[1].config(state='normal')
+		self.tkText[1].config(width=480)
+		self.tkText[1].config(wrap='word')
+		self.tkText[1].place()
+		self.tkText[1].place_configure(anchor='nw')
+		self.tkText[1].place_configure(bordermode='inside')
+		self.tkText[1].place_configure(height=380)
+		self.tkText[1].place_configure(width=480)
+		self.tkText[1].place_configure(x=10)
+		self.tkText[1].place_configure(y=210)
+
+		logging.info('[gui.create_window] Creating text widget #%d' % 3)
+		self.tkText[2]=tk.Text()
+		self.tkText[2].config(bg='white')
+		self.tkText[2].config(bd=2)
+		self.tkText[2].config(font=('Aerial', 8))
+		self.tkText[2].config(foreground='black')
+		self.tkText[2].config(height=28)
+		self.tkText[2].config(padx=5)
+		self.tkText[2].config(pady=5)
+		self.tkText[2].config(state='normal')
+		self.tkText[2].insert(tk.END, "jpg, bmp, gif, png, jpeg, flv, mp4, webm")
+		self.tkText[2].config(width=362)
+		self.tkText[2].config(wrap='word')
+		self.tkText[2].place()
+		self.tkText[2].place_configure(anchor='nw')
+		self.tkText[2].place_configure(bordermode='inside')
+		self.tkText[2].place_configure(height=28)
+		self.tkText[2].place_configure(width=305)
+		self.tkText[2].place_configure(x=130)
+		self.tkText[2].place_configure(y=135)
+
+		logging.info('[gui.create_window] Creating text widget #%d' % 4)
+		self.tkText[3]=tk.Text()
+		self.tkText[3].config(bg='white')
+		self.tkText[3].config(bd=2)
+		self.tkText[3].config(font=('Aerial', 8))
+		self.tkText[3].config(foreground='black')
+		self.tkText[3].config(height=28)
+		self.tkText[3].config(padx=5)
+		self.tkText[3].config(pady=5)
+		self.tkText[3].config(state='normal')
+		self.tkText[3].insert(tk.END, "yes")
+		self.tkText[3].config(width=100)
+		self.tkText[3].config(wrap='word')
+		self.tkText[3].place()
+		self.tkText[3].place_configure(anchor='nw')
+		self.tkText[3].place_configure(bordermode='inside')
+		self.tkText[3].place_configure(height=28)
+		self.tkText[3].place_configure(width=100)
+		self.tkText[3].place_configure(x=130)
+		self.tkText[3].place_configure(y=165)
+
+		logging.info('[gui.create_window] Starting button widget loop')
+		logging.info('[gui.create_window] Creating button widget #%d' % 1)
+		self.tkButton[0]=tk.Button()
+		self.tkButton[0].config(background='red')
+		self.tkButton[0].config(borderwidth='2')
+		self.tkButton[0].config(command=lambda instance=1: gui.callback(self, instance))
+		self.tkButton[0].config(font=('Aerial', 12))
+		self.tkButton[0].config(height=28)
+		self.tkButton[0].config(justify='center')
+		self.tkButton[0].config(text='X')
+		self.tkButton[0].config(width=28)
+		self.tkButton[0].config(wraplength='28')
+		self.tkButton[0].place()
+		self.tkButton[0].place_configure(anchor='ne')
+		self.tkButton[0].place_configure(bordermode='inside')
+		self.tkButton[0].place_configure(height=28)
+		self.tkButton[0].place_configure(width=28)
+		self.tkButton[0].place_configure(x=492)
+		self.tkButton[0].place_configure(y=15)
+
+		logging.info('[gui.create_window] Creating button widget #%d' % 2)
+		self.tkButton[1]=tk.Button()
+		self.tkButton[1].config(background='gray')
+		self.tkButton[1].config(borderwidth='2')
+		self.tkButton[1].config(command=lambda instance=2: gui.callback(self, instance))
+		self.tkButton[1].config(font=('Aerial', 8))
+		self.tkButton[1].config(height=50)
+		self.tkButton[1].config(justify='center')
+		self.tkButton[1].config(text='Rename Files')
+		self.tkButton[1].config(width=50)
+		self.tkButton[1].config(wraplength='45')
+		self.tkButton[1].place()
+		self.tkButton[1].place_configure(anchor='ne')
+		self.tkButton[1].place_configure(bordermode='inside')
+		self.tkButton[1].place_configure(height=50)
+		self.tkButton[1].place_configure(width=50)
+		self.tkButton[1].place_configure(x=492)
+		self.tkButton[1].place_configure(y=140)
 
 		self.root.mainloop()
+
+
+	def callback(self, instance):
+		self.instance = instance
+
+		if self.instance == 1:
+			logging.info('[gui.callback] Button %d pressed' % 1)
+			gui.kill_root(self)
+
+		if self.instance == 2:
+			logging.info('[gui.callback] Button %d pressed' % 2)
+
+
+	def return_root(self):
+		return self.root
+
+
+	def kill_root(self):
+		self.root.destroy()
+		return
+
+
+	def return_text(self, field):
+		self.field = field
+		self.address = self.field-1
+		return self.tkText[self.address].get("1.0", tk.END)
+
+
+	def write_text(self, field, text_to_write):
+		self.field = field
+		self.address = self.field-1
+		self.text_to_write = text_to_write
+		if self.text_to_write != self.text_to_write_mem:
+			self.tkText[self.address].insert(tk.END, self.text_to_write)
+			self.text_to_write_mem = self.text_to_write
+		return
+
+
+	def clear_text(self, field):
+		self.field = field
+		self.address = self.field-1
+		self.tkText[self.address].delete("1.0", tk.END)
+		return
+
+
 if __name__ == "__main__":
 	appwindow = gui('debug.log')
 	appwindow.create_window()

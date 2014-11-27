@@ -15,7 +15,7 @@ import sys
 #######################################################################################################################
 projectPath = os.path.split(sys.argv[0])
 debugLogFile = os.path.normcase(os.path.join(projectPath[0], 'debug.log'))
-guiIniFile = os.path.normcase(os.path.join(projectPath[0], 'gui_setup.ini'))
+guiIniFile = os.path.normcase(os.path.join(projectPath[0], 'autofilename_gui_setup.ini'))
 
 
 #######################################################################################################################
