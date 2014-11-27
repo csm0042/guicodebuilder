@@ -1791,6 +1791,7 @@ class gui(object):
 
         self.path, self.junk = os.path.split(self.inifile)
         self.outputfile = os.path.join(self.path, 'gui.py')
+        self.outputfile = self.outputfile.replace('scripts', 'output')
 
         f = open(self.outputfile, 'w')
         f.write(self.codetowritetofile)

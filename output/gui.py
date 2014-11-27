@@ -195,8 +195,8 @@ class gui(object):
 		self.Text = Text()
 		self.text_settings = Text()
 		self.TextPlace = Place()
-		self.Text_to_write = str()
-		self.Text_to_write_mem = str()
+		self.text_to_write = str()
+		self.text_to_write_mem = str()
 		self.tkText = [tk.Text() for i in range(self.textCount)]
 		logging.info('[gui.__init__] Found configuration data for %d text widgets' % self.textCount)
 
